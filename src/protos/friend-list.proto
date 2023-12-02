@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service FriendListProto {
+  rpc getFriendsByUserId(UserId) returns (GetFriendListsResponseDto);
+  rpc areUsersFriends(AreUsersFriendsRequestDto) returns (AreUsersFriendsResponseDto);
+  rpc addFriend(CreateFriendListDto) returns (FriendList);
+  rpc removeFriend(FriendListId) returns (DeleteFriendListResponseDto);
+}
+
+message UserId {
+  int32 id = 1;
+}
+
+message AreUsersFriendsRequestDto {
+  int32 id = 1;
+  int32 userId = 2;
+}
+
+message AreUsersFriendsResponseDto {
+  bool success = 1;
+}
+
+message GetFriendListsResponseDto {
+  repeated FriendList friends = 1;
+}
+
+message DeleteFriendListResponseDto {
+  bool success = 1;
+}
+
+message FriendListId {
+  int32 id = 1;
+}
+
+message CreateFriendListDto {
+    int32 requesterId = 1;
+    int32 addresseId = 2;
+    string friendType = 3;
+}
+
+message FriendList {
+  int32 id = 1;
+  int32 requesterId = 2;
+  int32 addresseId = 3;
+  string friendType = 4;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+}
+
+  
