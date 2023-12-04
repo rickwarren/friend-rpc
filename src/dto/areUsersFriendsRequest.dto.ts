@@ -1,4 +1,4 @@
 export class AreUsersFriendsRequestDto {
-    id: number;
-    userId: number;
+    id: string;
+    userId: string;
 }

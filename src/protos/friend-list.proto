@@ -10,12 +10,12 @@ service FriendListProto {
 }
 
 message UserId {
-  int32 id = 1;
+  string id = 1;
 }
 
 message AreUsersFriendsRequestDto {
-  int32 id = 1;
-  int32 userId = 2;
+  string id = 1;
+  string userId = 2;
 }
 
 message AreUsersFriendsResponseDto {
@@ -31,19 +31,19 @@ message DeleteFriendListResponseDto {
 }
 
 message FriendListId {
-  int32 id = 1;
+  string id = 1;
 }
 
 message CreateFriendListDto {
-    int32 requesterId = 1;
-    int32 addresseId = 2;
+    string requesterId = 1;
+    string addresseId = 2;
     string friendType = 3;
 }
 
 message FriendList {
-  int32 id = 1;
-  int32 requesterId = 2;
-  int32 addresseId = 3;
+  string id = 1;
+  string requesterId = 2;
+  string addresseId = 3;
   string friendType = 4;
   google.protobuf.Timestamp createdAt = 5;
   google.protobuf.Timestamp updatedAt = 6;

@@ -1,4 +1,4 @@
 export class GetFriendRequestDto {
-    requesterId: number;
-    addresseId: number;
+    requesterId: string;
+    addresseId: string;
 }

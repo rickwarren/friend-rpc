@@ -3,13 +3,13 @@ import * as protoscript from 'protoscript';
 
 export class FriendListDto {
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsNotEmpty()
-  requesterId: number;
+  requesterId: string;
 
   @IsNotEmpty()
-  addresseId: number;
+  addresseId: string;
 
   @IsNotEmpty()
   friendType: string;
