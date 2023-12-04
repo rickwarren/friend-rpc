@@ -1,3 +1,3 @@
 export class FriendListId {
-    id: number;
+    id: string;
 }

@@ -2,10 +2,10 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateFriendListDto {
   @IsNotEmpty()
-  requesterId: number;
+  requesterId: string;
 
   @IsNotEmpty()
-  addresseId: number;
+  addresseId: string;
 
   @IsNotEmpty()
   friendType: string;

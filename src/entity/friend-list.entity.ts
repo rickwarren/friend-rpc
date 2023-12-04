@@ -10,16 +10,16 @@ import * as protoscript from 'protoscript';
 
 @Entity()
 export class FriendList extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
-  requesterId: number;
+  requesterId: string;
 
   @Column()
-  addresseId: number;
+  addresseId: string;
 
-  @Column()
+  @Column({ nullable: true })
   friendType: string;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP(6)' })

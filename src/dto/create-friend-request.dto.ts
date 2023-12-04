@@ -1,13 +1,13 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateFriendRequestDto {
-  id?: number;
+  id?: string;
   
   @IsNotEmpty()
-  requesterId: number;
+  requesterId: string;
 
   @IsNotEmpty()
-  addresseId: number;
+  addresseId: string;
 
   status: string;
 }

@@ -16,8 +16,8 @@ import type { ClientConfiguration } from "twirpscript";
 //========================================//
 
 export interface GetFriendRequestDto {
-  requesterId: number;
-  addresseId: number;
+  requesterId: string;
+  addresseId: string;
 }
 
 export interface GetFriendRequestResponseDto {
@@ -33,32 +33,32 @@ export interface FriendRequestResponseDto {
 }
 
 export interface Id {
-  id: number;
+  id: string;
 }
 
 export interface FriendRequestId {
-  id: number;
+  id: string;
 }
 
 export interface UpdateFriendRequestDto {
-  id: number;
-  requesterId: number;
-  addresseId: number;
+  id: string;
+  requesterId: string;
+  addresseId: string;
   status: string;
   createdAt: protoscript.Timestamp;
   updatedAt: protoscript.Timestamp;
 }
 
 export interface CreateFriendRequestDto {
-  requesterId: number;
-  addresseId: number;
+  requesterId: string;
+  addresseId: string;
   status: string;
 }
 
 export interface FriendRequest {
-  id: number;
-  requesterId: number;
-  addresseId: number;
+  id: string;
+  requesterId: string;
+  addresseId: string;
   status: string;
   createdAt: protoscript.Timestamp;
   updatedAt: protoscript.Timestamp;
@@ -414,8 +414,8 @@ export const GetFriendRequestDto = {
     msg?: Partial<GetFriendRequestDto>,
   ): GetFriendRequestDto {
     return {
-      requesterId: 0,
-      addresseId: 0,
+      requesterId: "",
+      addresseId: "",
       ...msg,
     };
   },
@@ -428,10 +428,10 @@ export const GetFriendRequestDto = {
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.requesterId) {
-      writer.writeInt32(1, msg.requesterId);
+      writer.writeString(1, msg.requesterId);
     }
     if (msg.addresseId) {
-      writer.writeInt32(2, msg.addresseId);
+      writer.writeString(2, msg.addresseId);
     }
     return writer;
   },
@@ -447,11 +447,11 @@ export const GetFriendRequestDto = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.requesterId = reader.readInt32();
+          msg.requesterId = reader.readString();
           break;
         }
         case 2: {
-          msg.addresseId = reader.readInt32();
+          msg.addresseId = reader.readString();
           break;
         }
         default: {
@@ -708,7 +708,7 @@ export const Id = {
    */
   initialize: function (msg?: Partial<Id>): Id {
     return {
-      id: 0,
+      id: "",
       ...msg,
     };
   },
@@ -721,7 +721,7 @@ export const Id = {
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.id) {
-      writer.writeInt32(1, msg.id);
+      writer.writeString(1, msg.id);
     }
     return writer;
   },
@@ -734,7 +734,7 @@ export const Id = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = reader.readInt32();
+          msg.id = reader.readString();
           break;
         }
         default: {
@@ -773,7 +773,7 @@ export const FriendRequestId = {
    */
   initialize: function (msg?: Partial<FriendRequestId>): FriendRequestId {
     return {
-      id: 0,
+      id: "",
       ...msg,
     };
   },
@@ -786,7 +786,7 @@ export const FriendRequestId = {
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.id) {
-      writer.writeInt32(1, msg.id);
+      writer.writeString(1, msg.id);
     }
     return writer;
   },
@@ -802,7 +802,7 @@ export const FriendRequestId = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = reader.readInt32();
+          msg.id = reader.readString();
           break;
         }
         default: {
@@ -843,9 +843,9 @@ export const UpdateFriendRequestDto = {
     msg?: Partial<UpdateFriendRequestDto>,
   ): UpdateFriendRequestDto {
     return {
-      id: 0,
-      requesterId: 0,
-      addresseId: 0,
+      id: "",
+      requesterId: "",
+      addresseId: "",
       status: "",
       createdAt: protoscript.Timestamp.initialize(),
       updatedAt: protoscript.Timestamp.initialize(),
@@ -861,13 +861,13 @@ export const UpdateFriendRequestDto = {
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.id) {
-      writer.writeInt32(1, msg.id);
+      writer.writeString(1, msg.id);
     }
     if (msg.requesterId) {
-      writer.writeInt32(2, msg.requesterId);
+      writer.writeString(2, msg.requesterId);
     }
     if (msg.addresseId) {
-      writer.writeInt32(3, msg.addresseId);
+      writer.writeString(3, msg.addresseId);
     }
     if (msg.status) {
       writer.writeString(4, msg.status);
@@ -900,15 +900,15 @@ export const UpdateFriendRequestDto = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = reader.readInt32();
+          msg.id = reader.readString();
           break;
         }
         case 2: {
-          msg.requesterId = reader.readInt32();
+          msg.requesterId = reader.readString();
           break;
         }
         case 3: {
-          msg.addresseId = reader.readInt32();
+          msg.addresseId = reader.readString();
           break;
         }
         case 4: {
@@ -961,8 +961,8 @@ export const CreateFriendRequestDto = {
     msg?: Partial<CreateFriendRequestDto>,
   ): CreateFriendRequestDto {
     return {
-      requesterId: 0,
-      addresseId: 0,
+      requesterId: "",
+      addresseId: "",
       status: "",
       ...msg,
     };
@@ -976,10 +976,10 @@ export const CreateFriendRequestDto = {
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.requesterId) {
-      writer.writeInt32(1, msg.requesterId);
+      writer.writeString(1, msg.requesterId);
     }
     if (msg.addresseId) {
-      writer.writeInt32(2, msg.addresseId);
+      writer.writeString(2, msg.addresseId);
     }
     if (msg.status) {
       writer.writeString(3, msg.status);
@@ -998,11 +998,11 @@ export const CreateFriendRequestDto = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.requesterId = reader.readInt32();
+          msg.requesterId = reader.readString();
           break;
         }
         case 2: {
-          msg.addresseId = reader.readInt32();
+          msg.addresseId = reader.readString();
           break;
         }
         case 3: {
@@ -1045,9 +1045,9 @@ export const FriendRequest = {
    */
   initialize: function (msg?: Partial<FriendRequest>): FriendRequest {
     return {
-      id: 0,
-      requesterId: 0,
-      addresseId: 0,
+      id: "",
+      requesterId: "",
+      addresseId: "",
       status: "",
       createdAt: protoscript.Timestamp.initialize(),
       updatedAt: protoscript.Timestamp.initialize(),
@@ -1063,13 +1063,13 @@ export const FriendRequest = {
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.id) {
-      writer.writeInt32(1, msg.id);
+      writer.writeString(1, msg.id);
     }
     if (msg.requesterId) {
-      writer.writeInt32(2, msg.requesterId);
+      writer.writeString(2, msg.requesterId);
     }
     if (msg.addresseId) {
-      writer.writeInt32(3, msg.addresseId);
+      writer.writeString(3, msg.addresseId);
     }
     if (msg.status) {
       writer.writeString(4, msg.status);
@@ -1102,15 +1102,15 @@ export const FriendRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = reader.readInt32();
+          msg.id = reader.readString();
           break;
         }
         case 2: {
-          msg.requesterId = reader.readInt32();
+          msg.requesterId = reader.readString();
           break;
         }
         case 3: {
-          msg.addresseId = reader.readInt32();
+          msg.addresseId = reader.readString();
           break;
         }
         case 4: {
@@ -1164,8 +1164,8 @@ export const GetFriendRequestDtoJSON = {
     msg?: Partial<GetFriendRequestDto>,
   ): GetFriendRequestDto {
     return {
-      requesterId: 0,
-      addresseId: 0,
+      requesterId: "",
+      addresseId: "",
       ...msg,
     };
   },
@@ -1195,11 +1195,11 @@ export const GetFriendRequestDtoJSON = {
   ): GetFriendRequestDto {
     const _requesterId_ = json["requesterId"];
     if (_requesterId_) {
-      msg.requesterId = protoscript.parseNumber(_requesterId_);
+      msg.requesterId = _requesterId_;
     }
     const _addresseId_ = json["addresseId"];
     if (_addresseId_) {
-      msg.addresseId = protoscript.parseNumber(_addresseId_);
+      msg.addresseId = _addresseId_;
     }
     return msg;
   },
@@ -1405,7 +1405,7 @@ export const IdJSON = {
    */
   initialize: function (msg?: Partial<Id>): Id {
     return {
-      id: 0,
+      id: "",
       ...msg,
     };
   },
@@ -1427,7 +1427,7 @@ export const IdJSON = {
   _readMessage: function (msg: Id, json: any): Id {
     const _id_ = json["id"];
     if (_id_) {
-      msg.id = protoscript.parseNumber(_id_);
+      msg.id = _id_;
     }
     return msg;
   },
@@ -1456,7 +1456,7 @@ export const FriendRequestIdJSON = {
    */
   initialize: function (msg?: Partial<FriendRequestId>): FriendRequestId {
     return {
-      id: 0,
+      id: "",
       ...msg,
     };
   },
@@ -1480,7 +1480,7 @@ export const FriendRequestIdJSON = {
   _readMessage: function (msg: FriendRequestId, json: any): FriendRequestId {
     const _id_ = json["id"];
     if (_id_) {
-      msg.id = protoscript.parseNumber(_id_);
+      msg.id = _id_;
     }
     return msg;
   },
@@ -1511,9 +1511,9 @@ export const UpdateFriendRequestDtoJSON = {
     msg?: Partial<UpdateFriendRequestDto>,
   ): UpdateFriendRequestDto {
     return {
-      id: 0,
-      requesterId: 0,
-      addresseId: 0,
+      id: "",
+      requesterId: "",
+      addresseId: "",
       status: "",
       createdAt: protoscript.TimestampJSON.initialize(),
       updatedAt: protoscript.TimestampJSON.initialize(),
@@ -1558,15 +1558,15 @@ export const UpdateFriendRequestDtoJSON = {
   ): UpdateFriendRequestDto {
     const _id_ = json["id"];
     if (_id_) {
-      msg.id = protoscript.parseNumber(_id_);
+      msg.id = _id_;
     }
     const _requesterId_ = json["requesterId"];
     if (_requesterId_) {
-      msg.requesterId = protoscript.parseNumber(_requesterId_);
+      msg.requesterId = _requesterId_;
     }
     const _addresseId_ = json["addresseId"];
     if (_addresseId_) {
-      msg.addresseId = protoscript.parseNumber(_addresseId_);
+      msg.addresseId = _addresseId_;
     }
     const _status_ = json["status"];
     if (_status_) {
@@ -1609,8 +1609,8 @@ export const CreateFriendRequestDtoJSON = {
     msg?: Partial<CreateFriendRequestDto>,
   ): CreateFriendRequestDto {
     return {
-      requesterId: 0,
-      addresseId: 0,
+      requesterId: "",
+      addresseId: "",
       status: "",
       ...msg,
     };
@@ -1644,11 +1644,11 @@ export const CreateFriendRequestDtoJSON = {
   ): CreateFriendRequestDto {
     const _requesterId_ = json["requesterId"];
     if (_requesterId_) {
-      msg.requesterId = protoscript.parseNumber(_requesterId_);
+      msg.requesterId = _requesterId_;
     }
     const _addresseId_ = json["addresseId"];
     if (_addresseId_) {
-      msg.addresseId = protoscript.parseNumber(_addresseId_);
+      msg.addresseId = _addresseId_;
     }
     const _status_ = json["status"];
     if (_status_) {
@@ -1681,9 +1681,9 @@ export const FriendRequestJSON = {
    */
   initialize: function (msg?: Partial<FriendRequest>): FriendRequest {
     return {
-      id: 0,
-      requesterId: 0,
-      addresseId: 0,
+      id: "",
+      requesterId: "",
+      addresseId: "",
       status: "",
       createdAt: protoscript.TimestampJSON.initialize(),
       updatedAt: protoscript.TimestampJSON.initialize(),
@@ -1725,15 +1725,15 @@ export const FriendRequestJSON = {
   _readMessage: function (msg: FriendRequest, json: any): FriendRequest {
     const _id_ = json["id"];
     if (_id_) {
-      msg.id = protoscript.parseNumber(_id_);
+      msg.id = _id_;
     }
     const _requesterId_ = json["requesterId"];
     if (_requesterId_) {
-      msg.requesterId = protoscript.parseNumber(_requesterId_);
+      msg.requesterId = _requesterId_;
     }
     const _addresseId_ = json["addresseId"];
     if (_addresseId_) {
-      msg.addresseId = protoscript.parseNumber(_addresseId_);
+      msg.addresseId = _addresseId_;
     }
     const _status_ = json["status"];
     if (_status_) {
