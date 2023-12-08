@@ -18,6 +18,9 @@ const friendRequestProto: FriendRequestProto = {
         const requests = await friendRequestRepo.manager.find(FriendRequest, {
           where: { addresseId: id.id, status: "pending" },
         });
+        if(requests.length < 1) {
+          throw Error('Requests not found');
+        }
         return { requests: requests };
     },
     getFriendRequestsByRequesterId: async (id: Id): Promise<GetFriendRequestResponseDto> => {
@@ -26,36 +29,48 @@ const friendRequestProto: FriendRequestProto = {
         const requests = await friendRequestRepo.manager.find(FriendRequest, {
             where: { requesterId: id.id, status: 'pending' },
           });
+
         return { requests: requests };
     },
     getFriendRequest: async (data: GetFriendRequestDto): Promise<FriendRequest> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
         const request = await friendRequestRepo.manager.findOne(FriendRequest, {
-            where: { requesterId: data.requesterId, addresseId: data.addresseId, status: "pending" },
-          });
-          return request;
+          where: { requesterId: data.requesterId, addresseId: data.addresseId, status: "pending" },
+        });
+        if(!request) {
+          throw Error('Request not found');
+        }
+        return request;
     },
     createFriendRequest: async (data: CreateFriendRequestDto): Promise<FriendRequest> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
         await friendRequestRepo.manager.save(mapToFriendRequestEngity(data));
-        return await friendRequestRepo.manager.findOne(FriendRequest, { where: { id: data.id } });
-    },
+        const request = await friendRequestRepo.manager.findOne(FriendRequest, { where: { id: data.id } });
+        if(!request) {
+          throw Error('Request not created');
+        }
+        return request;
+      },
     updateFriendRequest: async (data: UpdateFriendRequestDto): Promise<FriendRequest> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
         await friendRequestRepo.manager.save(mapToFriendRequestEngity(data));
-        return await friendRequestRepo.manager.findOne(FriendRequest, { where: { id: data.id } });
-    },
+        const request = await friendRequestRepo.manager.findOne(FriendRequest, { where: { id: data.id } });
+        if(!request) {
+          throw Error('Request not updated');
+        }
+        return request;
+      },
     deleteFriendRequest: async (id: FriendRequestId): Promise<DeleteFriendRequestResponseDto> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
-        if (friendRequestRepo.manager.delete(FriendRequest, { id: id.id })) {
-            return { success: true };
-        } else {
-            return { success: false };
+        const request = await friendRequestRepo.manager.delete(FriendRequest, { Where: { id: id.id }});
+        if(!request) {
+          throw Error('Request not deleted');
         }
+        return { success: true };
     },
     acceptFriendRequest: async (id: FriendRequestId): Promise<FriendRequestResponseDto> => {
         const AppDataSource = await getDataSource();
@@ -79,13 +94,13 @@ const friendRequestProto: FriendRequestProto = {
           }
     },
     rejectFriendRequest: async (id: FriendRequestId): Promise<FriendRequestResponseDto> => {
-        const AppDataSource = await getDataSource();
-        const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
-        if (
-          await friendRequestRepo.manager.update(FriendRequest, id, {
-            status: 'rejected',
-          })
-        ) {
+      const AppDataSource = await getDataSource();
+      const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
+      if (
+        await friendRequestRepo.manager.update(FriendRequest, id, {
+          status: 'rejected',
+        })
+      ) {
         return { success: true };
       }
       return { success: false };
