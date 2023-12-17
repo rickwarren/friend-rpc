@@ -14,6 +14,6 @@ export class UpdateFriendListDto {
   @IsNotEmpty()
   friendtype: string;
 
-  createdAt: protoscript.Timestamp;
-  updatedAt: protoscript.Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -1,4 +1,4 @@
-import { FriendRequestProto, createFriendRequestProto } from '../protos/friend-request.pb.ts';
+import { FriendRequestDto, FriendRequestProto, createFriendRequestProto } from '../protos/friend-request.pb.ts';
 import { getDataSource } from '../data-source.ts';
 import { FriendRequest } from '../entity/friend-request.entity.ts';
 import { CreateFriendRequestDto } from '../dto/create-friend-request.dto.ts';
@@ -32,7 +32,7 @@ const friendRequestProto: FriendRequestProto = {
 
         return { requests: requests };
     },
-    getFriendRequest: async (data: GetFriendRequestDto): Promise<FriendRequest> => {
+    getFriendRequest: async (data: GetFriendRequestDto): Promise<FriendRequestDto> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
         const request = await friendRequestRepo.manager.findOne(FriendRequest, {
@@ -43,7 +43,7 @@ const friendRequestProto: FriendRequestProto = {
         }
         return request;
     },
-    createFriendRequest: async (data: CreateFriendRequestDto): Promise<FriendRequest> => {
+    createFriendRequest: async (data: CreateFriendRequestDto): Promise<FriendRequestDto> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
         await friendRequestRepo.manager.save(mapToFriendRequestEngity(data));
@@ -53,7 +53,7 @@ const friendRequestProto: FriendRequestProto = {
         }
         return request;
       },
-    updateFriendRequest: async (data: UpdateFriendRequestDto): Promise<FriendRequest> => {
+    updateFriendRequest: async (data: UpdateFriendRequestDto): Promise<FriendRequestDto> => {
         const AppDataSource = await getDataSource();
         const friendRequestRepo = AppDataSource.getRepository(FriendRequest);
         await friendRequestRepo.manager.save(mapToFriendRequestEngity(data));

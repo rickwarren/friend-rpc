@@ -21,7 +21,7 @@ export interface GetFriendRequestDto {
 }
 
 export interface GetFriendRequestResponseDto {
-  requests: FriendRequest[];
+  requests: FriendRequestDto[];
 }
 
 export interface DeleteFriendRequestResponseDto {
@@ -45,8 +45,8 @@ export interface UpdateFriendRequestDto {
   requesterId: string;
   addresseId: string;
   status: string;
-  createdAt: protoscript.Timestamp;
-  updatedAt: protoscript.Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateFriendRequestDto {
@@ -55,13 +55,13 @@ export interface CreateFriendRequestDto {
   status: string;
 }
 
-export interface FriendRequest {
+export interface FriendRequestDto {
   id: string;
   requesterId: string;
   addresseId: string;
   status: string;
-  createdAt: protoscript.Timestamp;
-  updatedAt: protoscript.Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }
 
 //========================================//
@@ -95,37 +95,37 @@ export async function getFriendRequestsByRequesterId(
 export async function getFriendRequest(
   getFriendRequestDto: GetFriendRequestDto,
   config?: ClientConfiguration,
-): Promise<FriendRequest> {
+): Promise<FriendRequestDto> {
   const response = await PBrequest(
     "/FriendRequestProto/getFriendRequest",
     GetFriendRequestDto.encode(getFriendRequestDto),
     config,
   );
-  return FriendRequest.decode(response);
+  return FriendRequestDto.decode(response);
 }
 
 export async function createFriendRequest(
   createFriendRequestDto: CreateFriendRequestDto,
   config?: ClientConfiguration,
-): Promise<FriendRequest> {
+): Promise<FriendRequestDto> {
   const response = await PBrequest(
     "/FriendRequestProto/createFriendRequest",
     CreateFriendRequestDto.encode(createFriendRequestDto),
     config,
   );
-  return FriendRequest.decode(response);
+  return FriendRequestDto.decode(response);
 }
 
 export async function updateFriendRequest(
   updateFriendRequestDto: UpdateFriendRequestDto,
   config?: ClientConfiguration,
-): Promise<FriendRequest> {
+): Promise<FriendRequestDto> {
   const response = await PBrequest(
     "/FriendRequestProto/updateFriendRequest",
     UpdateFriendRequestDto.encode(updateFriendRequestDto),
     config,
   );
-  return FriendRequest.decode(response);
+  return FriendRequestDto.decode(response);
 }
 
 export async function deleteFriendRequest(
@@ -195,37 +195,37 @@ export async function getFriendRequestsByRequesterIdJSON(
 export async function getFriendRequestJSON(
   getFriendRequestDto: GetFriendRequestDto,
   config?: ClientConfiguration,
-): Promise<FriendRequest> {
+): Promise<FriendRequestDto> {
   const response = await JSONrequest(
     "/FriendRequestProto/getFriendRequest",
     GetFriendRequestDtoJSON.encode(getFriendRequestDto),
     config,
   );
-  return FriendRequestJSON.decode(response);
+  return FriendRequestDtoJSON.decode(response);
 }
 
 export async function createFriendRequestJSON(
   createFriendRequestDto: CreateFriendRequestDto,
   config?: ClientConfiguration,
-): Promise<FriendRequest> {
+): Promise<FriendRequestDto> {
   const response = await JSONrequest(
     "/FriendRequestProto/createFriendRequest",
     CreateFriendRequestDtoJSON.encode(createFriendRequestDto),
     config,
   );
-  return FriendRequestJSON.decode(response);
+  return FriendRequestDtoJSON.decode(response);
 }
 
 export async function updateFriendRequestJSON(
   updateFriendRequestDto: UpdateFriendRequestDto,
   config?: ClientConfiguration,
-): Promise<FriendRequest> {
+): Promise<FriendRequestDto> {
   const response = await JSONrequest(
     "/FriendRequestProto/updateFriendRequest",
     UpdateFriendRequestDtoJSON.encode(updateFriendRequestDto),
     config,
   );
-  return FriendRequestJSON.decode(response);
+  return FriendRequestDtoJSON.decode(response);
 }
 
 export async function deleteFriendRequestJSON(
@@ -280,15 +280,15 @@ export interface FriendRequestProto<Context = unknown> {
   getFriendRequest: (
     getFriendRequestDto: GetFriendRequestDto,
     context: Context,
-  ) => Promise<FriendRequest> | FriendRequest;
+  ) => Promise<FriendRequestDto> | FriendRequestDto;
   createFriendRequest: (
     createFriendRequestDto: CreateFriendRequestDto,
     context: Context,
-  ) => Promise<FriendRequest> | FriendRequest;
+  ) => Promise<FriendRequestDto> | FriendRequestDto;
   updateFriendRequest: (
     updateFriendRequestDto: UpdateFriendRequestDto,
     context: Context,
-  ) => Promise<FriendRequest> | FriendRequest;
+  ) => Promise<FriendRequestDto> | FriendRequestDto;
   deleteFriendRequest: (
     friendRequestId: FriendRequestId,
     context: Context,
@@ -331,7 +331,7 @@ export function createFriendRequestProto<Context>(
         name: "getFriendRequest",
         handler: service.getFriendRequest,
         input: { protobuf: GetFriendRequestDto, json: GetFriendRequestDtoJSON },
-        output: { protobuf: FriendRequest, json: FriendRequestJSON },
+        output: { protobuf: FriendRequestDto, json: FriendRequestDtoJSON },
       },
       createFriendRequest: {
         name: "createFriendRequest",
@@ -340,7 +340,7 @@ export function createFriendRequestProto<Context>(
           protobuf: CreateFriendRequestDto,
           json: CreateFriendRequestDtoJSON,
         },
-        output: { protobuf: FriendRequest, json: FriendRequestJSON },
+        output: { protobuf: FriendRequestDto, json: FriendRequestDtoJSON },
       },
       updateFriendRequest: {
         name: "updateFriendRequest",
@@ -349,7 +349,7 @@ export function createFriendRequestProto<Context>(
           protobuf: UpdateFriendRequestDto,
           json: UpdateFriendRequestDtoJSON,
         },
-        output: { protobuf: FriendRequest, json: FriendRequestJSON },
+        output: { protobuf: FriendRequestDto, json: FriendRequestDtoJSON },
       },
       deleteFriendRequest: {
         name: "deleteFriendRequest",
@@ -508,7 +508,7 @@ export const GetFriendRequestResponseDto = {
       writer.writeRepeatedMessage(
         1,
         msg.requests as any,
-        FriendRequest._writeMessage,
+        FriendRequestDto._writeMessage,
       );
     }
     return writer;
@@ -525,8 +525,8 @@ export const GetFriendRequestResponseDto = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          const m = FriendRequest.initialize();
-          reader.readMessage(m, FriendRequest._readMessage);
+          const m = FriendRequestDto.initialize();
+          reader.readMessage(m, FriendRequestDto._readMessage);
           msg.requests.push(m);
           break;
         }
@@ -847,8 +847,8 @@ export const UpdateFriendRequestDto = {
       requesterId: "",
       addresseId: "",
       status: "",
-      createdAt: protoscript.Timestamp.initialize(),
-      updatedAt: protoscript.Timestamp.initialize(),
+      createdAt: "",
+      updatedAt: "",
       ...msg,
     };
   },
@@ -873,18 +873,10 @@ export const UpdateFriendRequestDto = {
       writer.writeString(4, msg.status);
     }
     if (msg.createdAt) {
-      writer.writeMessage(
-        5,
-        msg.createdAt,
-        protoscript.Timestamp._writeMessage,
-      );
+      writer.writeString(5, msg.createdAt);
     }
     if (msg.updatedAt) {
-      writer.writeMessage(
-        6,
-        msg.updatedAt,
-        protoscript.Timestamp._writeMessage,
-      );
+      writer.writeString(6, msg.updatedAt);
     }
     return writer;
   },
@@ -916,11 +908,11 @@ export const UpdateFriendRequestDto = {
           break;
         }
         case 5: {
-          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          msg.createdAt = reader.readString();
           break;
         }
         case 6: {
-          reader.readMessage(msg.updatedAt, protoscript.Timestamp._readMessage);
+          msg.updatedAt = reader.readString();
           break;
         }
         default: {
@@ -1019,38 +1011,38 @@ export const CreateFriendRequestDto = {
   },
 };
 
-export const FriendRequest = {
+export const FriendRequestDto = {
   /**
-   * Serializes FriendRequest to protobuf.
+   * Serializes FriendRequestDto to protobuf.
    */
-  encode: function (msg: PartialDeep<FriendRequest>): Uint8Array {
-    return FriendRequest._writeMessage(
+  encode: function (msg: PartialDeep<FriendRequestDto>): Uint8Array {
+    return FriendRequestDto._writeMessage(
       msg,
       new protoscript.BinaryWriter(),
     ).getResultBuffer();
   },
 
   /**
-   * Deserializes FriendRequest from protobuf.
+   * Deserializes FriendRequestDto from protobuf.
    */
-  decode: function (bytes: ByteSource): FriendRequest {
-    return FriendRequest._readMessage(
-      FriendRequest.initialize(),
+  decode: function (bytes: ByteSource): FriendRequestDto {
+    return FriendRequestDto._readMessage(
+      FriendRequestDto.initialize(),
       new protoscript.BinaryReader(bytes),
     );
   },
 
   /**
-   * Initializes FriendRequest with all fields set to their default value.
+   * Initializes FriendRequestDto with all fields set to their default value.
    */
-  initialize: function (msg?: Partial<FriendRequest>): FriendRequest {
+  initialize: function (msg?: Partial<FriendRequestDto>): FriendRequestDto {
     return {
       id: "",
       requesterId: "",
       addresseId: "",
       status: "",
-      createdAt: protoscript.Timestamp.initialize(),
-      updatedAt: protoscript.Timestamp.initialize(),
+      createdAt: "",
+      updatedAt: "",
       ...msg,
     };
   },
@@ -1059,7 +1051,7 @@ export const FriendRequest = {
    * @private
    */
   _writeMessage: function (
-    msg: PartialDeep<FriendRequest>,
+    msg: PartialDeep<FriendRequestDto>,
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.id) {
@@ -1075,18 +1067,10 @@ export const FriendRequest = {
       writer.writeString(4, msg.status);
     }
     if (msg.createdAt) {
-      writer.writeMessage(
-        5,
-        msg.createdAt,
-        protoscript.Timestamp._writeMessage,
-      );
+      writer.writeString(5, msg.createdAt);
     }
     if (msg.updatedAt) {
-      writer.writeMessage(
-        6,
-        msg.updatedAt,
-        protoscript.Timestamp._writeMessage,
-      );
+      writer.writeString(6, msg.updatedAt);
     }
     return writer;
   },
@@ -1095,9 +1079,9 @@ export const FriendRequest = {
    * @private
    */
   _readMessage: function (
-    msg: FriendRequest,
+    msg: FriendRequestDto,
     reader: protoscript.BinaryReader,
-  ): FriendRequest {
+  ): FriendRequestDto {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -1118,11 +1102,11 @@ export const FriendRequest = {
           break;
         }
         case 5: {
-          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          msg.createdAt = reader.readString();
           break;
         }
         case 6: {
-          reader.readMessage(msg.updatedAt, protoscript.Timestamp._readMessage);
+          msg.updatedAt = reader.readString();
           break;
         }
         default: {
@@ -1243,7 +1227,7 @@ export const GetFriendRequestResponseDtoJSON = {
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.requests?.length) {
-      json["requests"] = msg.requests.map(FriendRequestJSON._writeMessage);
+      json["requests"] = msg.requests.map(FriendRequestDtoJSON._writeMessage);
     }
     return json;
   },
@@ -1258,8 +1242,8 @@ export const GetFriendRequestResponseDtoJSON = {
     const _requests_ = json["requests"];
     if (_requests_) {
       for (const item of _requests_) {
-        const m = FriendRequestJSON.initialize();
-        FriendRequestJSON._readMessage(m, item);
+        const m = FriendRequestDtoJSON.initialize();
+        FriendRequestDtoJSON._readMessage(m, item);
         msg.requests.push(m);
       }
     }
@@ -1515,8 +1499,8 @@ export const UpdateFriendRequestDtoJSON = {
       requesterId: "",
       addresseId: "",
       status: "",
-      createdAt: protoscript.TimestampJSON.initialize(),
-      updatedAt: protoscript.TimestampJSON.initialize(),
+      createdAt: "",
+      updatedAt: "",
       ...msg,
     };
   },
@@ -1540,11 +1524,11 @@ export const UpdateFriendRequestDtoJSON = {
     if (msg.status) {
       json["status"] = msg.status;
     }
-    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
-      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
+    if (msg.createdAt) {
+      json["createdAt"] = msg.createdAt;
     }
-    if (msg.updatedAt && msg.updatedAt.seconds && msg.updatedAt.nanos) {
-      json["updatedAt"] = protoscript.serializeTimestamp(msg.updatedAt);
+    if (msg.updatedAt) {
+      json["updatedAt"] = msg.updatedAt;
     }
     return json;
   },
@@ -1574,11 +1558,11 @@ export const UpdateFriendRequestDtoJSON = {
     }
     const _createdAt_ = json["createdAt"];
     if (_createdAt_) {
-      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
+      msg.createdAt = _createdAt_;
     }
     const _updatedAt_ = json["updatedAt"];
     if (_updatedAt_) {
-      msg.updatedAt = protoscript.parseTimestamp(_updatedAt_);
+      msg.updatedAt = _updatedAt_;
     }
     return msg;
   },
@@ -1658,35 +1642,35 @@ export const CreateFriendRequestDtoJSON = {
   },
 };
 
-export const FriendRequestJSON = {
+export const FriendRequestDtoJSON = {
   /**
-   * Serializes FriendRequest to JSON.
+   * Serializes FriendRequestDto to JSON.
    */
-  encode: function (msg: PartialDeep<FriendRequest>): string {
-    return JSON.stringify(FriendRequestJSON._writeMessage(msg));
+  encode: function (msg: PartialDeep<FriendRequestDto>): string {
+    return JSON.stringify(FriendRequestDtoJSON._writeMessage(msg));
   },
 
   /**
-   * Deserializes FriendRequest from JSON.
+   * Deserializes FriendRequestDto from JSON.
    */
-  decode: function (json: string): FriendRequest {
-    return FriendRequestJSON._readMessage(
-      FriendRequestJSON.initialize(),
+  decode: function (json: string): FriendRequestDto {
+    return FriendRequestDtoJSON._readMessage(
+      FriendRequestDtoJSON.initialize(),
       JSON.parse(json),
     );
   },
 
   /**
-   * Initializes FriendRequest with all fields set to their default value.
+   * Initializes FriendRequestDto with all fields set to their default value.
    */
-  initialize: function (msg?: Partial<FriendRequest>): FriendRequest {
+  initialize: function (msg?: Partial<FriendRequestDto>): FriendRequestDto {
     return {
       id: "",
       requesterId: "",
       addresseId: "",
       status: "",
-      createdAt: protoscript.TimestampJSON.initialize(),
-      updatedAt: protoscript.TimestampJSON.initialize(),
+      createdAt: "",
+      updatedAt: "",
       ...msg,
     };
   },
@@ -1695,7 +1679,7 @@ export const FriendRequestJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: PartialDeep<FriendRequest>,
+    msg: PartialDeep<FriendRequestDto>,
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
@@ -1710,11 +1694,11 @@ export const FriendRequestJSON = {
     if (msg.status) {
       json["status"] = msg.status;
     }
-    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
-      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
+    if (msg.createdAt) {
+      json["createdAt"] = msg.createdAt;
     }
-    if (msg.updatedAt && msg.updatedAt.seconds && msg.updatedAt.nanos) {
-      json["updatedAt"] = protoscript.serializeTimestamp(msg.updatedAt);
+    if (msg.updatedAt) {
+      json["updatedAt"] = msg.updatedAt;
     }
     return json;
   },
@@ -1722,7 +1706,7 @@ export const FriendRequestJSON = {
   /**
    * @private
    */
-  _readMessage: function (msg: FriendRequest, json: any): FriendRequest {
+  _readMessage: function (msg: FriendRequestDto, json: any): FriendRequestDto {
     const _id_ = json["id"];
     if (_id_) {
       msg.id = _id_;
@@ -1741,11 +1725,11 @@ export const FriendRequestJSON = {
     }
     const _createdAt_ = json["createdAt"];
     if (_createdAt_) {
-      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
+      msg.createdAt = _createdAt_;
     }
     const _updatedAt_ = json["updatedAt"];
     if (_updatedAt_) {
-      msg.updatedAt = protoscript.parseTimestamp(_updatedAt_);
+      msg.updatedAt = _updatedAt_;
     }
     return msg;
   },

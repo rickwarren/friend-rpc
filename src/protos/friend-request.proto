@@ -1,13 +1,11 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
-
 service FriendRequestProto {
   rpc getFriendRequestsByUserId(Id) returns (GetFriendRequestResponseDto);
   rpc getFriendRequestsByRequesterId(Id) returns (GetFriendRequestResponseDto);
-  rpc getFriendRequest(GetFriendRequestDto) returns (FriendRequest);
-  rpc createFriendRequest(CreateFriendRequestDto) returns (FriendRequest);
-  rpc updateFriendRequest(UpdateFriendRequestDto) returns (FriendRequest);
+  rpc getFriendRequest(GetFriendRequestDto) returns (FriendRequestDto);
+  rpc createFriendRequest(CreateFriendRequestDto) returns (FriendRequestDto);
+  rpc updateFriendRequest(UpdateFriendRequestDto) returns (FriendRequestDto);
   rpc deleteFriendRequest(FriendRequestId) returns (DeleteFriendRequestResponseDto);
   rpc acceptFriendRequest(FriendRequestId) returns (FriendRequestResponseDto);
   rpc rejectFriendRequest(FriendRequestId) returns (FriendRequestResponseDto);
@@ -19,7 +17,7 @@ message GetFriendRequestDto {
 }
 
 message GetFriendRequestResponseDto {
-  repeated FriendRequest requests = 1;
+  repeated FriendRequestDto requests = 1;
 }
 
 message DeleteFriendRequestResponseDto {
@@ -43,8 +41,8 @@ message UpdateFriendRequestDto {
     string requesterId = 2;
     string addresseId = 3;
     string status = 4;
-    google.protobuf.Timestamp createdAt = 5;
-    google.protobuf.Timestamp updatedAt = 6;
+    string createdAt = 5;
+    string updatedAt = 6;
   }
 
 message CreateFriendRequestDto {
@@ -53,11 +51,11 @@ message CreateFriendRequestDto {
   string status = 3;
 }
 
-message FriendRequest {
+message FriendRequestDto {
   string id = 1;
   string requesterId = 2;
   string addresseId = 3;
   string status = 4;
-  google.protobuf.Timestamp createdAt = 5;
-  google.protobuf.Timestamp updatedAt = 6;
+  string createdAt = 5;
+  string updatedAt = 6;
 }

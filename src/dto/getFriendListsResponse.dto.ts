@@ -1,5 +1,5 @@
-import { FriendList } from "../entity/friend-list.entity.ts";
+import { FriendListDto } from "./friend-list.dto.ts";
 
 export class GetFriendListsResponseDto {
-    friends: FriendList[];
+    friends: FriendListDto[];
 }
