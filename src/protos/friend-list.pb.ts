@@ -29,7 +29,7 @@ export interface AreUsersFriendsResponseDto {
 }
 
 export interface GetFriendListsResponseDto {
-  friends: FriendList[];
+  friends: FriendListDto[];
 }
 
 export interface DeleteFriendListResponseDto {
@@ -46,13 +46,13 @@ export interface CreateFriendListDto {
   friendType: string;
 }
 
-export interface FriendList {
+export interface FriendListDto {
   id: string;
   requesterId: string;
   addresseId: string;
   friendType: string;
-  createdAt: protoscript.Timestamp;
-  updatedAt: protoscript.Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }
 
 //========================================//
@@ -86,13 +86,13 @@ export async function areUsersFriends(
 export async function addFriend(
   createFriendListDto: CreateFriendListDto,
   config?: ClientConfiguration,
-): Promise<FriendList> {
+): Promise<FriendListDto> {
   const response = await PBrequest(
     "/FriendListProto/addFriend",
     CreateFriendListDto.encode(createFriendListDto),
     config,
   );
-  return FriendList.decode(response);
+  return FriendListDto.decode(response);
 }
 
 export async function removeFriend(
@@ -138,13 +138,13 @@ export async function areUsersFriendsJSON(
 export async function addFriendJSON(
   createFriendListDto: CreateFriendListDto,
   config?: ClientConfiguration,
-): Promise<FriendList> {
+): Promise<FriendListDto> {
   const response = await JSONrequest(
     "/FriendListProto/addFriend",
     CreateFriendListDtoJSON.encode(createFriendListDto),
     config,
   );
-  return FriendListJSON.decode(response);
+  return FriendListDtoJSON.decode(response);
 }
 
 export async function removeFriendJSON(
@@ -175,7 +175,7 @@ export interface FriendListProto<Context = unknown> {
   addFriend: (
     createFriendListDto: CreateFriendListDto,
     context: Context,
-  ) => Promise<FriendList> | FriendList;
+  ) => Promise<FriendListDto> | FriendListDto;
   removeFriend: (
     friendListId: FriendListId,
     context: Context,
@@ -213,7 +213,7 @@ export function createFriendListProto<Context>(
         name: "addFriend",
         handler: service.addFriend,
         input: { protobuf: CreateFriendListDto, json: CreateFriendListDtoJSON },
-        output: { protobuf: FriendList, json: FriendListJSON },
+        output: { protobuf: FriendListDto, json: FriendListDtoJSON },
       },
       removeFriend: {
         name: "removeFriend",
@@ -492,7 +492,7 @@ export const GetFriendListsResponseDto = {
       writer.writeRepeatedMessage(
         1,
         msg.friends as any,
-        FriendList._writeMessage,
+        FriendListDto._writeMessage,
       );
     }
     return writer;
@@ -509,8 +509,8 @@ export const GetFriendListsResponseDto = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          const m = FriendList.initialize();
-          reader.readMessage(m, FriendList._readMessage);
+          const m = FriendListDto.initialize();
+          reader.readMessage(m, FriendListDto._readMessage);
           msg.friends.push(m);
           break;
         }
@@ -748,38 +748,38 @@ export const CreateFriendListDto = {
   },
 };
 
-export const FriendList = {
+export const FriendListDto = {
   /**
-   * Serializes FriendList to protobuf.
+   * Serializes FriendListDto to protobuf.
    */
-  encode: function (msg: PartialDeep<FriendList>): Uint8Array {
-    return FriendList._writeMessage(
+  encode: function (msg: PartialDeep<FriendListDto>): Uint8Array {
+    return FriendListDto._writeMessage(
       msg,
       new protoscript.BinaryWriter(),
     ).getResultBuffer();
   },
 
   /**
-   * Deserializes FriendList from protobuf.
+   * Deserializes FriendListDto from protobuf.
    */
-  decode: function (bytes: ByteSource): FriendList {
-    return FriendList._readMessage(
-      FriendList.initialize(),
+  decode: function (bytes: ByteSource): FriendListDto {
+    return FriendListDto._readMessage(
+      FriendListDto.initialize(),
       new protoscript.BinaryReader(bytes),
     );
   },
 
   /**
-   * Initializes FriendList with all fields set to their default value.
+   * Initializes FriendListDto with all fields set to their default value.
    */
-  initialize: function (msg?: Partial<FriendList>): FriendList {
+  initialize: function (msg?: Partial<FriendListDto>): FriendListDto {
     return {
       id: "",
       requesterId: "",
       addresseId: "",
       friendType: "",
-      createdAt: protoscript.Timestamp.initialize(),
-      updatedAt: protoscript.Timestamp.initialize(),
+      createdAt: "",
+      updatedAt: "",
       ...msg,
     };
   },
@@ -788,7 +788,7 @@ export const FriendList = {
    * @private
    */
   _writeMessage: function (
-    msg: PartialDeep<FriendList>,
+    msg: PartialDeep<FriendListDto>,
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
     if (msg.id) {
@@ -804,18 +804,10 @@ export const FriendList = {
       writer.writeString(4, msg.friendType);
     }
     if (msg.createdAt) {
-      writer.writeMessage(
-        5,
-        msg.createdAt,
-        protoscript.Timestamp._writeMessage,
-      );
+      writer.writeString(5, msg.createdAt);
     }
     if (msg.updatedAt) {
-      writer.writeMessage(
-        6,
-        msg.updatedAt,
-        protoscript.Timestamp._writeMessage,
-      );
+      writer.writeString(6, msg.updatedAt);
     }
     return writer;
   },
@@ -824,9 +816,9 @@ export const FriendList = {
    * @private
    */
   _readMessage: function (
-    msg: FriendList,
+    msg: FriendListDto,
     reader: protoscript.BinaryReader,
-  ): FriendList {
+  ): FriendListDto {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -847,11 +839,11 @@ export const FriendList = {
           break;
         }
         case 5: {
-          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          msg.createdAt = reader.readString();
           break;
         }
         case 6: {
-          reader.readMessage(msg.updatedAt, protoscript.Timestamp._readMessage);
+          msg.updatedAt = reader.readString();
           break;
         }
         default: {
@@ -1078,7 +1070,7 @@ export const GetFriendListsResponseDtoJSON = {
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.friends?.length) {
-      json["friends"] = msg.friends.map(FriendListJSON._writeMessage);
+      json["friends"] = msg.friends.map(FriendListDtoJSON._writeMessage);
     }
     return json;
   },
@@ -1093,8 +1085,8 @@ export const GetFriendListsResponseDtoJSON = {
     const _friends_ = json["friends"];
     if (_friends_) {
       for (const item of _friends_) {
-        const m = FriendListJSON.initialize();
-        FriendListJSON._readMessage(m, item);
+        const m = FriendListDtoJSON.initialize();
+        FriendListDtoJSON._readMessage(m, item);
         msg.friends.push(m);
       }
     }
@@ -1287,35 +1279,35 @@ export const CreateFriendListDtoJSON = {
   },
 };
 
-export const FriendListJSON = {
+export const FriendListDtoJSON = {
   /**
-   * Serializes FriendList to JSON.
+   * Serializes FriendListDto to JSON.
    */
-  encode: function (msg: PartialDeep<FriendList>): string {
-    return JSON.stringify(FriendListJSON._writeMessage(msg));
+  encode: function (msg: PartialDeep<FriendListDto>): string {
+    return JSON.stringify(FriendListDtoJSON._writeMessage(msg));
   },
 
   /**
-   * Deserializes FriendList from JSON.
+   * Deserializes FriendListDto from JSON.
    */
-  decode: function (json: string): FriendList {
-    return FriendListJSON._readMessage(
-      FriendListJSON.initialize(),
+  decode: function (json: string): FriendListDto {
+    return FriendListDtoJSON._readMessage(
+      FriendListDtoJSON.initialize(),
       JSON.parse(json),
     );
   },
 
   /**
-   * Initializes FriendList with all fields set to their default value.
+   * Initializes FriendListDto with all fields set to their default value.
    */
-  initialize: function (msg?: Partial<FriendList>): FriendList {
+  initialize: function (msg?: Partial<FriendListDto>): FriendListDto {
     return {
       id: "",
       requesterId: "",
       addresseId: "",
       friendType: "",
-      createdAt: protoscript.TimestampJSON.initialize(),
-      updatedAt: protoscript.TimestampJSON.initialize(),
+      createdAt: "",
+      updatedAt: "",
       ...msg,
     };
   },
@@ -1324,7 +1316,7 @@ export const FriendListJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: PartialDeep<FriendList>,
+    msg: PartialDeep<FriendListDto>,
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
@@ -1339,11 +1331,11 @@ export const FriendListJSON = {
     if (msg.friendType) {
       json["friendType"] = msg.friendType;
     }
-    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
-      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
+    if (msg.createdAt) {
+      json["createdAt"] = msg.createdAt;
     }
-    if (msg.updatedAt && msg.updatedAt.seconds && msg.updatedAt.nanos) {
-      json["updatedAt"] = protoscript.serializeTimestamp(msg.updatedAt);
+    if (msg.updatedAt) {
+      json["updatedAt"] = msg.updatedAt;
     }
     return json;
   },
@@ -1351,7 +1343,7 @@ export const FriendListJSON = {
   /**
    * @private
    */
-  _readMessage: function (msg: FriendList, json: any): FriendList {
+  _readMessage: function (msg: FriendListDto, json: any): FriendListDto {
     const _id_ = json["id"];
     if (_id_) {
       msg.id = _id_;
@@ -1370,11 +1362,11 @@ export const FriendListJSON = {
     }
     const _createdAt_ = json["createdAt"];
     if (_createdAt_) {
-      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
+      msg.createdAt = _createdAt_;
     }
     const _updatedAt_ = json["updatedAt"];
     if (_updatedAt_) {
-      msg.updatedAt = protoscript.parseTimestamp(_updatedAt_);
+      msg.updatedAt = _updatedAt_;
     }
     return msg;
   },

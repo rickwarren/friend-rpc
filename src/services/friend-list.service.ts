@@ -1,4 +1,4 @@
-import { FriendListProto, createFriendListProto } from '../protos/friend-list.pb.ts';
+import { FriendListDto, FriendListProto, createFriendListProto } from '../protos/friend-list.pb.ts';
 import { getDataSource } from '../data-source.ts';
 import { GetFriendListsResponseDto } from '../dto/getFriendListsResponse.dto.ts';
 import { AreUsersFriendsRequestDto } from '../dto/areUsersFriendsRequest.dto.ts';
@@ -39,7 +39,7 @@ const friendListProto: FriendListProto = {
           return { success: false };
         }
     },
-    addFriend: async (data: CreateFriendListDto): Promise<FriendList> => {
+    addFriend: async (data: CreateFriendListDto): Promise<FriendListDto> => {
         const AppDataSource = await getDataSource();
         const friendListRepo = AppDataSource.getRepository(FriendList);
         return await friendListRepo.manager.save(FriendList, mapToFriendListEntity(data));
@@ -55,7 +55,7 @@ const friendListProto: FriendListProto = {
     }
   };
 
-  function mapToFriendListEntity(data: any): FriendList {
+  function mapToFriendListEntity(data: any): FriendListDto {
     const friendList = new FriendList();
     friendList.id = data.id ? data.id : null;
     friendList.requesterId = data.requesterId;
