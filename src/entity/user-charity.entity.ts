@@ -6,21 +6,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import * as protoscript from 'protoscript';
 
 @Entity()
-export class FriendRequest extends BaseEntity {
+export class UserCharity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: true })
-  requesterId: string;
+  userId: string;
 
   @Column({ nullable: true })
-  addresseId: string;
-
-  @Column({ nullable: true })
-  status: string;
+  charityId: string;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'NOW()' })
   createdAt: string;

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+service UserCharityProto {
+  rpc getUserCharities(UserID) returns (GetUserCharitiesResponseDto);
+  rpc createUserCharity(CreateUserCharityDto) returns (UserCharityDto);
+  rpc deleteUserCharity(UserCharityId) returns (DeleteUserCharityResponseDto);
+}
+
+message UserID {
+  string id = 1;
+}
+
+message UserCharityId {
+  string id = 1;
+}
+
+message GetUserCharitiesResponseDto {
+  repeated UserCharityDto userCharities = 1;
+}
+
+message DeleteUserCharityResponseDto {
+  bool success = 1;
+}
+
+message CreateUserCharityDto {
+  string userId = 1;
+  string charityId = 2;
+}
+
+message UserCharityDto {
+  string id = 1;
+  string userId = 2;
+  string charityId = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+}
+
+  
