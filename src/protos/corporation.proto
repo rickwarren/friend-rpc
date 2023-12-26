@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+service CorporationProto {
+  rpc getCorporations(EmptyId) returns (GetCorporationsResponseDto);
+  rpc getCorporation(CorporationId) returns (CorporationDto);
+  rpc createCorporation(CreateCorporationDto) returns (CorporationDto);
+  rpc updateCorporation(UpdateCorporationDto) returns (CorporationDto);
+  rpc deleteCorporation(CorporationId) returns (DeleteCorporationResponseDto);
+}
+
+message EmptyId {}
+
+message CorporationId {
+  string id = 1;
+}
+
+message GetCorporationsResponseDto {
+  repeated CorporationDto corporations = 1;
+}
+
+message DeleteCorporationResponseDto {
+  bool success = 1;
+}
+
+message CreateCorporationDto {
+  string name = 1;
+  string logo = 2;
+  string website = 3;
+}
+
+message UpdateCorporationDto {
+  string id = 1;
+  string name = 2;
+  string logo = 3;
+  string website = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message CorporationDto {
+  string id = 1;
+  string name = 2;
+  string logo = 3;
+  string website = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+  

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+service CharityProto {
+  rpc getCharities(Empty) returns (GetCharitiesResponseDto);
+  rpc getCharity(CharityId) returns (CharityDto);
+  rpc createCharity(CreateCharityDto) returns (CharityDto);
+  rpc updateCharity(UpdateCharityDto) returns (CharityDto);
+  rpc deleteCharity(CharityId) returns (DeleteCharityResponseDto);
+}
+
+message Empty {}
+
+message CharityId {
+  string id = 1;
+}
+
+message GetCharitiesResponseDto {
+  repeated CharityDto charities = 1;
+}
+
+message DeleteCharityResponseDto {
+  bool success = 1;
+}
+
+message CreateCharityDto {
+  string name = 1;
+  string logo = 2;
+  string website = 3;
+}
+
+message UpdateCharityDto {
+  string id = 1;
+  string name = 2;
+  string logo = 3;
+  string website = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message CharityDto {
+  string id = 1;
+  string name = 2;
+  string logo = 3;
+  string website = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+  

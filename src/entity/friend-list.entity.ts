@@ -12,10 +12,10 @@ export class FriendList extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   requesterId: string;
 
-  @Column()
+  @Column({ nullable: true })
   addresseId: string;
 
   @Column({ nullable: true })

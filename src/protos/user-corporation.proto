@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+service UserCorporationProto {
+  rpc getUserCorporations(UsrID) returns (GetUserCorporationsResponseDto);
+  rpc createUserCorporation(CreateUserCorporationDto) returns (UserCorporationDto);
+  rpc deleteUserCorporation(UserCorporationId) returns (DeleteUserCorporationResponseDto);
+}
+
+message UsrID {
+  string id = 1;
+}
+
+message UserCorporationId {
+  string id = 1;
+}
+
+message GetUserCorporationsResponseDto {
+  repeated UserCorporationDto userCorporations = 1;
+}
+
+message DeleteUserCorporationResponseDto {
+  bool success = 1;
+}
+
+message CreateUserCorporationDto {
+  string userId = 1;
+  string corporationId = 2;
+}
+
+message UserCorporationDto {
+  string id = 1;
+  string userId = 2;
+  string corporationId = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+}
+
+  
