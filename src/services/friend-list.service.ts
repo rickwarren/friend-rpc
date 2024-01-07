@@ -17,14 +17,14 @@ const friendListProto: FriendListProto = {
         const addresse = await friendListRepo.manager.find(FriendList, { where: { addresseId: userId.id } });
         const friendList = [];
         if (requester.length > 0) {
-        requester.forEach((friend) => {
-            friendList.push(friend);
-        });
+            requester.forEach((friend) => {
+                friendList.push(friend);
+            });
         }
         if (addresse.length > 0) {
-        addresse.forEach((friend) => {
-            friendList.push(friend);
-        });
+            addresse.forEach((friend) => {
+                friendList.push(friend);
+            });
         }
         return { friends: friendList };
     },
