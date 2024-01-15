@@ -10,7 +10,7 @@ import {
     DeleteCorporationResponseDto,
 } from '../protos/Corporation.pb.ts';
 import { getDataSource } from '../data-source.ts';
-import { Corporation } from 'src/entity/corporation.entity.ts';
+import { Corporation } from '../entity/corporation.entity.ts';
 
 const corporationProto: CorporationProto = {
     getCorporations: async (EmptyId): Promise<GetCorporationsResponseDto> => {

@@ -2,10 +2,21 @@ import { createServer } from "http";
 import { createTwirpServer } from "twirpscript";
 import { friendListProtoHandler } from "./services/friend-list.service.ts";
 import { friendRequestProtoHandler } from "./services/friend-request.service.ts";
+import { corporationProtoHandler } from "./services/corporation.service.ts";
+import { userCharityProtoHandler } from "./services/user-charity.service.ts";
+import { charityProtoHandler } from "./services/charity.service.ts";
+import { userCorporationProtoHandler } from "./services/user-corporation.service.ts";
 
 const PORT = 8082;
 
-const app = createTwirpServer([friendListProtoHandler, friendRequestProtoHandler]);
+const app = createTwirpServer([
+  friendListProtoHandler, 
+  friendRequestProtoHandler,
+  charityProtoHandler,
+  corporationProtoHandler,
+  userCharityProtoHandler,
+  userCorporationProtoHandler,
+]);
 
 app.use(async (req, _ctx, next) => {
   if (req.method === "OPTIONS") {

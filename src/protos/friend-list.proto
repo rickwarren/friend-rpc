@@ -2,34 +2,30 @@ syntax = "proto3";
 
 service FriendListProto {
   rpc getFriendsByUserId(UserId) returns (GetFriendListsResponseDto);
-  rpc areUsersFriends(AreUsersFriendsRequestDto) returns (AreUsersFriendsResponseDto);
-  rpc addFriend(CreateFriendListDto) returns (FriendListDto);
-  rpc removeFriend(FriendListId) returns (DeleteFriendListResponseDto);
+  rpc getFriendsOfFriendsByUserId(UserId) returns (GetFriendListsResponseDto);
+  rpc addFriend(CreateFriendListDto) returns (CreateFriendListResponseDto);
+  rpc removeFriend(UserIds) returns (DeleteFriendListResponseDto);
 }
 
 message UserId {
   string id = 1;
 }
 
-message AreUsersFriendsRequestDto {
+message UserIds {
   string id = 1;
-  string userId = 2;
-}
-
-message AreUsersFriendsResponseDto {
-  bool success = 1;
+  string id2 = 2;
 }
 
 message GetFriendListsResponseDto {
   repeated FriendListDto friends = 1;
 }
 
-message DeleteFriendListResponseDto {
+message CreateFriendListResponseDto {
   bool success = 1;
 }
 
-message FriendListId {
-  string id = 1;
+message DeleteFriendListResponseDto {
+  bool success = 1;
 }
 
 message CreateFriendListDto {

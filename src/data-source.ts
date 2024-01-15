@@ -2,6 +2,10 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { FriendList } from './entity/friend-list.entity.ts';
 import { FriendRequest } from './entity/friend-request.entity.ts';
+import { Charity } from './entity/charity.entity.ts';
+import { Corporation } from './entity/corporation.entity.ts';
+import { UserCharity } from './entity/user-charity.entity.ts';
+import { UserCorporation } from './entity/user-corporation.entity.ts';
 
 
 export const AppDataSource = new DataSource({
@@ -13,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: 'friend',
   synchronize: true,
   logging: true,
-  entities: [FriendList, FriendRequest],
+  entities: [FriendList, FriendRequest, Charity, Corporation, UserCharity, UserCorporation],
   subscribers: [],
   migrations: [],
 });

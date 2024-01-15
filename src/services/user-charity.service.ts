@@ -9,7 +9,7 @@ import {
     UserCharityId,
 } from '../protos/user-charity.pb.ts';
 import { getDataSource } from '../data-source.ts';
-import { UserCharity } from 'src/entity/user-charity.entity.ts';
+import { UserCharity } from '../entity/user-charity.entity.ts';
 
 const userCharityProto: UserCharityProto = {
     getUserCharities: async (userId: UserID): Promise<GetUserCharitiesResponseDto> => {

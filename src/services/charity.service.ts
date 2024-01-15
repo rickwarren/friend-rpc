@@ -10,7 +10,7 @@ import {
     DeleteCharityResponseDto,
 } from '../protos/charity.pb.ts';
 import { getDataSource } from '../data-source.ts';
-import { Charity } from 'src/entity/charity.entity.ts';
+import { Charity } from '../entity/charity.entity.ts';
 
 const charityProto: CharityProto = {
     getCharities: async (Empty): Promise<GetCharitiesResponseDto> => {
