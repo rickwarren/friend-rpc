@@ -9,7 +9,7 @@ import {
     UserCorporationId,
 } from '../protos/user-corporation.pb.ts';
 import { getDataSource } from '../data-source.ts';
-import { UserCorporation } from 'src/entity/user-Corporation.entity.ts';
+import { UserCorporation } from '../entity/user-Corporation.entity.ts';
 
 const userCorporationProto: UserCorporationProto = {
     getUserCorporations: async (userId: UsrID): Promise<GetUserCorporationsResponseDto> => {

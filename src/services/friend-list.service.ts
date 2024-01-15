@@ -1,67 +1,78 @@
-import { FriendListDto, FriendListProto, createFriendListProto } from '../protos/friend-list.pb.ts';
-import { getDataSource } from '../data-source.ts';
-import { GetFriendListsResponseDto } from '../dto/getFriendListsResponse.dto.ts';
-import { AreUsersFriendsRequestDto } from '../dto/areUsersFriendsRequest.dto.ts';
-import { UserId } from '../dto/userRequest.dto.ts';
-import { CreateFriendListDto } from '../dto/create-friend-list.dto.ts';
-import { FriendListId } from '../dto/friendListId.dto.ts';
-import { DeleteFriendListResponseDto } from '../dto/deleteFriendListResponse.dto.ts';
-import { AreUsersFriendsResponseDto } from '../dto/areUsersFriendsResponse.dto.ts';
-import { FriendList } from '../entity/friend-list.entity.ts';
+import { 
+    CreateFriendListDto, 
+    CreateFriendListResponseDto, 
+    DeleteFriendListResponseDto,  
+    FriendListProto, 
+    GetFriendListsResponseDto, 
+    UserId, 
+    UserIds, 
+    createFriendListProto 
+} from '../protos/friend-list.pb.ts';
+import { session } from '../neo4j.ts';
 
 const friendListProto: FriendListProto = {
     getFriendsByUserId: async (userId: UserId): Promise<GetFriendListsResponseDto> => {
-        const AppDataSource = await getDataSource();
-        const friendListRepo = AppDataSource.getRepository(FriendList);
-        const requester = await friendListRepo.manager.find(FriendList, { where: { requesterId: userId.id } });
-        const addresse = await friendListRepo.manager.find(FriendList, { where: { addresseId: userId.id } });
-        const friendList = [];
-        if (requester.length > 0) {
-            requester.forEach((friend) => {
-                friendList.push(friend);
-            });
-        }
-        if (addresse.length > 0) {
-            addresse.forEach((friend) => {
-                friendList.push(friend);
-            });
-        }
-        return { friends: friendList };
-    },
-    areUsersFriends: async (data: AreUsersFriendsRequestDto): Promise<AreUsersFriendsResponseDto> => {
-        const AppDataSource = await getDataSource();
-        const friendListRepo = AppDataSource.getRepository(FriendList);
-        const requester = await friendListRepo.manager.find(FriendList, { where: { requesterId: data.id, addresseId: data.userId } });
-        const addresse = await friendListRepo.manager.find(FriendList, { where: { requesterId: data.userId, addresseId: data.id } });
-        if (requester.length > 0 || addresse.length > 0) {
-          return { success: true };
-        } else {
-          return { success: false };
+        try {
+            const res = await session.executeRead(tx => tx.run(`
+                MATCH (u:User {id: $userId})-[r:IS_FRIENDS_WITH]-(i:User)
+                RETURN i`,
+                { userId: userId.id }
+            ));
+            const users = res.records.map(row => row.get('i'))
+            const usrs = users.map((user) => {
+                return user.properties;
+            })
+            return { friends: usrs };
+        }catch(e) {
+            console.log(e);
+            return { friends: [] };
         }
     },
-    addFriend: async (data: CreateFriendListDto): Promise<FriendListDto> => {
-        const AppDataSource = await getDataSource();
-        const friendListRepo = AppDataSource.getRepository(FriendList);
-        return await friendListRepo.manager.save(FriendList, mapToFriendListEntity(data));
+    getFriendsOfFriendsByUserId: async (userId: UserId): Promise<GetFriendListsResponseDto> => {
+        try {
+            const res = await session.executeRead(tx => tx.run(`
+                MATCH (a:User {id: $userId})
+                MATCH (a)-[:IS_FRIENDS_WITH]-(:User)-[:IS_FRIENDS_WITH]-(u:User)
+                WHERE NOT (a)-[:IS_FRIENDS_WITH]-(u)
+                RETURN u`,
+                { userId: userId.id }
+            ));
+            const users = res.records.map(row => row.get('u'))
+            const usrs = users.map((user) => {
+                return user.properties;
+            })
+            console.log(usrs);
+            return { friends: usrs  };
+        }catch(e) {
+            console.log(e);
+            return { friends: [] };
+        }
     },
-    removeFriend: async (id: FriendListId): Promise<DeleteFriendListResponseDto> => {
-        const AppDataSource = await getDataSource();
-        const friendListRepo = AppDataSource.getRepository(FriendList);
-        if (await friendListRepo.manager.delete(FriendList, id)) {
+    addFriend: async (data: CreateFriendListDto): Promise<CreateFriendListResponseDto> => {
+        try {
+            const res = await session.executeWrite(tx => tx.run(`
+                CREATE (u:User {id: $requesterId})-[r:IS_FRIENDS_WITH]->(i:User {id: $addresseId})`, 
+                { requesterId: data.requesterId, addresseId: data.addresseId }
+            ));
             return { success: true };
-        } else {
+        } catch(e) {
+            console.log(e);
+            return { success: false };
+        }
+    },
+    removeFriend: async (ids: UserIds): Promise<DeleteFriendListResponseDto> => {
+        try {
+            const res = await session.executeWrite(tx => tx.run(`
+                MATCH (u:User {id: $userId})-[r:IS_FRIENDS_WITH]-(i:User {id: $user2Id})
+                DELETE r`,
+                { userId: ids.id, user2Id: ids.id2 }
+            ));
+            return { success: true };
+        } catch(e) {
+            console.log(e)
             return { success: false };
         }
     }
   };
-
-  function mapToFriendListEntity(data: any): FriendListDto {
-    const friendList = new FriendList();
-    friendList.id = data.id ? data.id : null;
-    friendList.requesterId = data.requesterId;
-    friendList.addresseId = data.addresseId;
-    friendList.friendType = data.friendType;
-    return friendList;
-  }
   
   export const friendListProtoHandler = createFriendListProto(friendListProto);
