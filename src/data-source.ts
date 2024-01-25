@@ -6,6 +6,8 @@ import { Charity } from './entity/charity.entity.ts';
 import { Corporation } from './entity/corporation.entity.ts';
 import { UserCharity } from './entity/user-charity.entity.ts';
 import { UserCorporation } from './entity/user-corporation.entity.ts';
+import { CharityOwner } from './entity/charity-owner.entity.ts';
+import { CorporationOwner } from './entity/corporation-owner.entity.ts';
 
 
 export const AppDataSource = new DataSource({
@@ -17,7 +19,7 @@ export const AppDataSource = new DataSource({
   database: 'friend',
   synchronize: true,
   logging: true,
-  entities: [FriendList, FriendRequest, Charity, Corporation, UserCharity, UserCorporation],
+  entities: [FriendList, FriendRequest, Charity, Corporation, UserCharity, UserCorporation, CharityOwner, CorporationOwner],
   subscribers: [],
   migrations: [],
 });

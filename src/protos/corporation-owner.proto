@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+service CorporationOwnerProto {
+  rpc getCorporationOwners(CorporationID) returns (GetCorporationOwnersResponseDto);
+  rpc createCorporationOwner(CreateCorporationOwnerDto) returns (CorporationOwnerDto);
+  rpc deleteCorporationOwner(CorporationID) returns (DeleteCorporationOwnerResponseDto);
+}
+
+message CorporationID {
+  string id = 1;
+}
+
+message GetCorporationOwnersResponseDto {
+  repeated CorporationOwnerDto corporationOwners = 1;
+}
+
+message DeleteCorporationOwnerResponseDto {
+  bool success = 1;
+}
+
+message CreateCorporationOwnerDto {
+  string userId = 1;
+  string corporationId = 2;
+}
+
+message CorporationOwnerDto {
+  string id = 1;
+  string userId = 2;
+  string corporationId = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+}
+
+  

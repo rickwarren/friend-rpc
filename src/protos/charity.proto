@@ -3,6 +3,7 @@ syntax = "proto3";
 service CharityProto {
   rpc getCharities(Empty) returns (GetCharitiesResponseDto);
   rpc getCharity(CharityId) returns (CharityDto);
+  rpc getCharityByName(CharityNameDto) returns (CharityDto);
   rpc createCharity(CreateCharityDto) returns (CharityDto);
   rpc updateCharity(UpdateCharityDto) returns (CharityDto);
   rpc deleteCharity(CharityId) returns (DeleteCharityResponseDto);
@@ -12,6 +13,10 @@ message Empty {}
 
 message CharityId {
   string id = 1;
+}
+
+message CharityNameDto {
+  string name = 1;
 }
 
 message GetCharitiesResponseDto {

@@ -8,6 +8,7 @@ import {
     CreateCorporationDto,
     UpdateCorporationDto,
     DeleteCorporationResponseDto,
+    CorporationNameDto,
 } from '../protos/Corporation.pb.ts';
 import { getDataSource } from '../data-source.ts';
 import { Corporation } from '../entity/corporation.entity.ts';
@@ -22,39 +23,69 @@ const corporationProto: CorporationProto = {
         }
         return { corporations: corporations };
     },
-    getCorporation: async (corporationId: CorporationId): Promise<CorporationDto> => {
+    getCorporation: async (
+        corporationId: CorporationId,
+    ): Promise<CorporationDto> => {
         const AppDataSource = await getDataSource();
         const corporationRepo = AppDataSource.getRepository(Corporation);
-        const corporation = await corporationRepo.manager.findOne(Corporation, {where: { id: corporationId.id }});
+        const corporation = await corporationRepo.manager.findOne(
+            Corporation, 
+            {where: { id: corporationId.id }},
+        );
         if (!corporation) {
             throw new Error('No corporation found');
         }
         return corporation;
     },
-    createCorporation: async (data: CreateCorporationDto): Promise<CorporationDto> => {
+    getCorporationByName: async (
+        name: CorporationNameDto,
+    ): Promise<CorporationDto> => {
+        const AppDataSource = await getDataSource();
+        const corporationRepo = AppDataSource.getRepository(Corporation);
+        const corporation = await corporationRepo.manager.findOne(
+            Corporation, 
+            { where: { name: name.name }},
+        );
+        if (!corporation) {
+            throw new Error('No corporation found');
+        }
+        return corporation;
+    },
+    createCorporation: async (
+        data: CreateCorporationDto,
+    ): Promise<CorporationDto> => {
         const AppDataSource = await getDataSource();
         const corporationRepo = AppDataSource.getRepository(Corporation);
         return await corporationRepo.manager.save(Corporation, data);
     },
 
-    updateCorporation: async (data: UpdateCorporationDto): Promise<CorporationDto> => {
+    updateCorporation: async (
+        data: UpdateCorporationDto,
+    ): Promise<CorporationDto> => {
         const AppDataSource = await getDataSource();
         const corporationRepo = AppDataSource.getRepository(Corporation);
-        const corporation = await corporationRepo.manager.update(Corporation, data, { id: data.id });
-        if(!corporation) {
+        const corporation = await corporationRepo.manager.update(
+            Corporation,
+            data,
+            { id: data.id },
+        );
+        if (!corporation) {
             throw new Error('no Corporation found');
         }
         return corporation.raw;
     },
-    deleteCorporation: async (id: CorporationId): Promise<DeleteCorporationResponseDto> => {
-        const AppDataSource = await getDataSource();
-        const corporationRepo = AppDataSource.getRepository(Corporation);
-        if (await corporationRepo.manager.delete(Corporation, id)) {
-            return { success: true };
-        } else {
-            return { success: false };
-        }
-    }
-  };
+    deleteCorporation: async (
+        id: CorporationId,
+    ): Promise<DeleteCorporationResponseDto> => {
+            const AppDataSource = await getDataSource();
+            const corporationRepo = AppDataSource.getRepository(Corporation);
+            if (await corporationRepo.manager.delete(Corporation, id)) {
+                return { success: true };
+            } else {
+                return { success: false };
+            }
+    },
+};
+
   
-  export const corporationProtoHandler = createCorporationProto(corporationProto);
+export const corporationProtoHandler = createCorporationProto(corporationProto);
