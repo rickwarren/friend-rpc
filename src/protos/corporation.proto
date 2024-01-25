@@ -3,6 +3,7 @@ syntax = "proto3";
 service CorporationProto {
   rpc getCorporations(EmptyId) returns (GetCorporationsResponseDto);
   rpc getCorporation(CorporationId) returns (CorporationDto);
+  rpc getCorporationByName(CorporationNameDto) returns (CorporationDto);
   rpc createCorporation(CreateCorporationDto) returns (CorporationDto);
   rpc updateCorporation(UpdateCorporationDto) returns (CorporationDto);
   rpc deleteCorporation(CorporationId) returns (DeleteCorporationResponseDto);
@@ -12,6 +13,10 @@ message EmptyId {}
 
 message CorporationId {
   string id = 1;
+}
+
+message CorporationNameDto {
+  string name = 1;
 }
 
 message GetCorporationsResponseDto {

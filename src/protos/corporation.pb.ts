@@ -21,6 +21,10 @@ export interface CorporationId {
   id: string;
 }
 
+export interface CorporationNameDto {
+  name: string;
+}
+
 export interface GetCorporationsResponseDto {
   corporations: CorporationDto[];
 }
@@ -76,6 +80,18 @@ export async function getCorporation(
   const response = await PBrequest(
     "/CorporationProto/getCorporation",
     CorporationId.encode(corporationId),
+    config,
+  );
+  return CorporationDto.decode(response);
+}
+
+export async function getCorporationByName(
+  corporationNameDto: CorporationNameDto,
+  config?: ClientConfiguration,
+): Promise<CorporationDto> {
+  const response = await PBrequest(
+    "/CorporationProto/getCorporationByName",
+    CorporationNameDto.encode(corporationNameDto),
     config,
   );
   return CorporationDto.decode(response);
@@ -145,6 +161,18 @@ export async function getCorporationJSON(
   return CorporationDtoJSON.decode(response);
 }
 
+export async function getCorporationByNameJSON(
+  corporationNameDto: CorporationNameDto,
+  config?: ClientConfiguration,
+): Promise<CorporationDto> {
+  const response = await JSONrequest(
+    "/CorporationProto/getCorporationByName",
+    CorporationNameDtoJSON.encode(corporationNameDto),
+    config,
+  );
+  return CorporationDtoJSON.decode(response);
+}
+
 export async function createCorporationJSON(
   createCorporationDto: CreateCorporationDto,
   config?: ClientConfiguration,
@@ -194,6 +222,10 @@ export interface CorporationProto<Context = unknown> {
     corporationId: CorporationId,
     context: Context,
   ) => Promise<CorporationDto> | CorporationDto;
+  getCorporationByName: (
+    corporationNameDto: CorporationNameDto,
+    context: Context,
+  ) => Promise<CorporationDto> | CorporationDto;
   createCorporation: (
     createCorporationDto: CreateCorporationDto,
     context: Context,
@@ -227,6 +259,12 @@ export function createCorporationProto<Context>(
         name: "getCorporation",
         handler: service.getCorporation,
         input: { protobuf: CorporationId, json: CorporationIdJSON },
+        output: { protobuf: CorporationDto, json: CorporationDtoJSON },
+      },
+      getCorporationByName: {
+        name: "getCorporationByName",
+        handler: service.getCorporationByName,
+        input: { protobuf: CorporationNameDto, json: CorporationNameDtoJSON },
         output: { protobuf: CorporationDto, json: CorporationDtoJSON },
       },
       createCorporation: {
@@ -365,6 +403,74 @@ export const CorporationId = {
       switch (field) {
         case 1: {
           msg.id = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const CorporationNameDto = {
+  /**
+   * Serializes CorporationNameDto to protobuf.
+   */
+  encode: function (msg: PartialDeep<CorporationNameDto>): Uint8Array {
+    return CorporationNameDto._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes CorporationNameDto from protobuf.
+   */
+  decode: function (bytes: ByteSource): CorporationNameDto {
+    return CorporationNameDto._readMessage(
+      CorporationNameDto.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes CorporationNameDto with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<CorporationNameDto>): CorporationNameDto {
+    return {
+      name: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<CorporationNameDto>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.name) {
+      writer.writeString(1, msg.name);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CorporationNameDto,
+    reader: protoscript.BinaryReader,
+  ): CorporationNameDto {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.name = reader.readString();
           break;
         }
         default: {
@@ -922,6 +1028,62 @@ export const CorporationIdJSON = {
     const _id_ = json["id"];
     if (_id_) {
       msg.id = _id_;
+    }
+    return msg;
+  },
+};
+
+export const CorporationNameDtoJSON = {
+  /**
+   * Serializes CorporationNameDto to JSON.
+   */
+  encode: function (msg: PartialDeep<CorporationNameDto>): string {
+    return JSON.stringify(CorporationNameDtoJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes CorporationNameDto from JSON.
+   */
+  decode: function (json: string): CorporationNameDto {
+    return CorporationNameDtoJSON._readMessage(
+      CorporationNameDtoJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes CorporationNameDto with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<CorporationNameDto>): CorporationNameDto {
+    return {
+      name: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<CorporationNameDto>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.name) {
+      json["name"] = msg.name;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CorporationNameDto,
+    json: any,
+  ): CorporationNameDto {
+    const _name_ = json["name"];
+    if (_name_) {
+      msg.name = _name_;
     }
     return msg;
   },

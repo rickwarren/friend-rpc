@@ -8,6 +8,7 @@ import {
     CreateCharityDto,
     UpdateCharityDto,
     DeleteCharityResponseDto,
+    CharityNameDto,
 } from '../protos/charity.pb.ts';
 import { getDataSource } from '../data-source.ts';
 import { Charity } from '../entity/charity.entity.ts';
@@ -26,6 +27,15 @@ const charityProto: CharityProto = {
         const AppDataSource = await getDataSource();
         const charityRepo = AppDataSource.getRepository(Charity);
         const charity = await charityRepo.manager.findOne(Charity, {where: { id: charityId.id }});
+        if (!charity) {
+            throw new Error('No charities found');
+        }
+        return charity;
+    },
+    getCharityByName: async (name: CharityNameDto): Promise<CharityDto> => {
+        const AppDataSource = await getDataSource()
+        const charityRepo = AppDataSource.getRepository(Charity);
+        const charity = await charityRepo.manager.findOne(Charity, {where: { name: name.name }});
         if (!charity) {
             throw new Error('No charities found');
         }

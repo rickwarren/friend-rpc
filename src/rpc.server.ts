@@ -6,6 +6,8 @@ import { corporationProtoHandler } from "./services/corporation.service.ts";
 import { userCharityProtoHandler } from "./services/user-charity.service.ts";
 import { charityProtoHandler } from "./services/charity.service.ts";
 import { userCorporationProtoHandler } from "./services/user-corporation.service.ts";
+import { charityOwnerProtoHandler } from "./services/charity-owner.service.ts";
+import { corporationOwnerProtoHandler } from "./services/corporation-owner.service.ts";
 
 const PORT = 8082;
 
@@ -16,6 +18,8 @@ const app = createTwirpServer([
   corporationProtoHandler,
   userCharityProtoHandler,
   userCorporationProtoHandler,
+  charityOwnerProtoHandler,
+  corporationOwnerProtoHandler,
 ]);
 
 app.use(async (req, _ctx, next) => {

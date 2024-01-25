@@ -21,6 +21,10 @@ export interface CharityId {
   id: string;
 }
 
+export interface CharityNameDto {
+  name: string;
+}
+
 export interface GetCharitiesResponseDto {
   charities: CharityDto[];
 }
@@ -76,6 +80,18 @@ export async function getCharity(
   const response = await PBrequest(
     "/CharityProto/getCharity",
     CharityId.encode(charityId),
+    config,
+  );
+  return CharityDto.decode(response);
+}
+
+export async function getCharityByName(
+  charityNameDto: CharityNameDto,
+  config?: ClientConfiguration,
+): Promise<CharityDto> {
+  const response = await PBrequest(
+    "/CharityProto/getCharityByName",
+    CharityNameDto.encode(charityNameDto),
     config,
   );
   return CharityDto.decode(response);
@@ -145,6 +161,18 @@ export async function getCharityJSON(
   return CharityDtoJSON.decode(response);
 }
 
+export async function getCharityByNameJSON(
+  charityNameDto: CharityNameDto,
+  config?: ClientConfiguration,
+): Promise<CharityDto> {
+  const response = await JSONrequest(
+    "/CharityProto/getCharityByName",
+    CharityNameDtoJSON.encode(charityNameDto),
+    config,
+  );
+  return CharityDtoJSON.decode(response);
+}
+
 export async function createCharityJSON(
   createCharityDto: CreateCharityDto,
   config?: ClientConfiguration,
@@ -194,6 +222,10 @@ export interface CharityProto<Context = unknown> {
     charityId: CharityId,
     context: Context,
   ) => Promise<CharityDto> | CharityDto;
+  getCharityByName: (
+    charityNameDto: CharityNameDto,
+    context: Context,
+  ) => Promise<CharityDto> | CharityDto;
   createCharity: (
     createCharityDto: CreateCharityDto,
     context: Context,
@@ -225,6 +257,12 @@ export function createCharityProto<Context>(service: CharityProto<Context>) {
         name: "getCharity",
         handler: service.getCharity,
         input: { protobuf: CharityId, json: CharityIdJSON },
+        output: { protobuf: CharityDto, json: CharityDtoJSON },
+      },
+      getCharityByName: {
+        name: "getCharityByName",
+        handler: service.getCharityByName,
+        input: { protobuf: CharityNameDto, json: CharityNameDtoJSON },
         output: { protobuf: CharityDto, json: CharityDtoJSON },
       },
       createCharity: {
@@ -357,6 +395,74 @@ export const CharityId = {
       switch (field) {
         case 1: {
           msg.id = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const CharityNameDto = {
+  /**
+   * Serializes CharityNameDto to protobuf.
+   */
+  encode: function (msg: PartialDeep<CharityNameDto>): Uint8Array {
+    return CharityNameDto._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes CharityNameDto from protobuf.
+   */
+  decode: function (bytes: ByteSource): CharityNameDto {
+    return CharityNameDto._readMessage(
+      CharityNameDto.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes CharityNameDto with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<CharityNameDto>): CharityNameDto {
+    return {
+      name: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<CharityNameDto>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.name) {
+      writer.writeString(1, msg.name);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CharityNameDto,
+    reader: protoscript.BinaryReader,
+  ): CharityNameDto {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.name = reader.readString();
           break;
         }
         default: {
@@ -906,6 +1012,59 @@ export const CharityIdJSON = {
     const _id_ = json["id"];
     if (_id_) {
       msg.id = _id_;
+    }
+    return msg;
+  },
+};
+
+export const CharityNameDtoJSON = {
+  /**
+   * Serializes CharityNameDto to JSON.
+   */
+  encode: function (msg: PartialDeep<CharityNameDto>): string {
+    return JSON.stringify(CharityNameDtoJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes CharityNameDto from JSON.
+   */
+  decode: function (json: string): CharityNameDto {
+    return CharityNameDtoJSON._readMessage(
+      CharityNameDtoJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes CharityNameDto with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<CharityNameDto>): CharityNameDto {
+    return {
+      name: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<CharityNameDto>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.name) {
+      json["name"] = msg.name;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: CharityNameDto, json: any): CharityNameDto {
+    const _name_ = json["name"];
+    if (_name_) {
+      msg.name = _name_;
     }
     return msg;
   },
